@@ -91,7 +91,7 @@ def home():
 
 @app.route("/image")
 def show_image():
-    return send_from_directory(".", "shark.jpg")
+    return send_from_directory(".", "shark.png")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
