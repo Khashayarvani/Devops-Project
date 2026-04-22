@@ -1,17 +1,393 @@
-body {
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f172a, #111827, #1e293b);
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.background-shapes .shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.28;
+  z-index: 0;
+}
+
+.shape-1 {
+  width: 250px;
+  height: 250px;
+  background: #38bdf8;
+  top: 80px;
+  left: -60px;
+}
+
+.shape-2 {
+  width: 280px;
+  height: 280px;
+  background: #8b5cf6;
+  top: 300px;
+  right: -80px;
+}
+
+.shape-3 {
+  width: 220px;
+  height: 220px;
+  background: #22c55e;
+  bottom: 50px;
+  left: 35%;
+}
+
+.navbar {
+  width: 90%;
+  margin: 24px auto;
+  padding: 18px 28px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100vh;
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.logo span {
+  color: #38bdf8;
+}
+
+.navbar nav a {
+  color: #e5e7eb;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: 0.3s;
+}
+
+.navbar nav a:hover {
+  color: #38bdf8;
+}
+
+.hero {
+  width: 90%;
+  margin: 40px auto 30px;
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-text h1 {
+  font-size: 3.2rem;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.tag {
+  color: #38bdf8;
+  font-weight: 600;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-description {
+  color: #d1d5db;
+  max-width: 650px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-size: 1.05rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn,
+.task-input-area button,
+.timer-buttons button,
+.quote-box button {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.primary-btn {
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+  color: white;
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.task-input-area button:hover,
+.timer-buttons button:hover,
+.quote-box button:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.hero-card,
+.panel,
+.stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.hero-card {
+  padding: 26px;
+}
+
+.hero-card h3 {
+  margin-bottom: 18px;
+  color: #38bdf8;
+}
+
+.summary-box p {
+  margin-bottom: 12px;
+  color: #e5e7eb;
 }
 
 .container {
+  width: 90%;
+  margin: 20px auto 50px;
+  position: relative;
+  z-index: 2;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 26px;
+}
+
+.stat-card {
+  padding: 22px;
   text-align: center;
-  background: #1e293b;
-  padding: 40px;
+}
+
+.stat-card h3 {
+  color: #38bdf8;
+  margin-bottom: 8px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.panel {
+  padding: 24px;
+}
+
+.panel h2 {
+  margin-bottom: 18px;
+  color: #f8fafc;
+}
+
+.task-input-area {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.task-input-area input {
+  flex: 1;
+  min-width: 220px;
+  padding: 13px 14px;
   border-radius: 12px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.task-input-area input::placeholder {
+  color: #cbd5e1;
+}
+
+.task-input-area button,
+.timer-buttons button,
+.quote-box button {
+  background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+.task-list {
+  list-style: none;
+}
+
+.task-list li {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-left input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.schedule-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.time {
+  min-width: 80px;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.schedule-item h4 {
+  margin-bottom: 5px;
+}
+
+.schedule-item p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.timer-box {
+  text-align: center;
+  padding: 20px 0;
+}
+
+#timer {
+  font-size: 3rem;
+  margin-bottom: 18px;
+  color: #38bdf8;
+}
+
+.timer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.quote-box {
+  text-align: center;
+}
+
+.quote-box p {
+  color: #e5e7eb;
+  line-height: 1.7;
+  margin-bottom: 18px;
+  font-size: 1.05rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 24px;
+  color: #cbd5e1;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 992px) {
+  .hero,
+  .content-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-text h1 {
+    font-size: 2.5rem;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .navbar nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .navbar nav a {
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  #timer {
+    font-size: 2.4rem;
+  }
+
+  .task-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
