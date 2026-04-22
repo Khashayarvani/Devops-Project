@@ -1,164 +1,114 @@
-const API = 'http://localhost:5000';
+const taskInput = document.getElementById("taskInput");
+const taskList = document.getElementById("taskList");
+const completedCount = document.getElementById("completedCount");
+const pendingCount = document.getElementById("pendingCount");
 
-let allSubjects = [];
-let selectedColor = '#4f46e5';
+let timer;
+let timeLeft = 25 * 60;
+let isRunning = false;
 
-// Demo data if backend is offline
-const demoData = [
-    { id: 1, name: 'DevOps', category: 'Technology', notes: 'Learning Docker, Kubernetes, CI/CD pipelines and cloud deployment strategies.', link: 'https://docs.docker.com', color: '#4f46e5' },
-    { id: 2, name: 'Python', category: 'Programming', notes: 'Flask, Django, data structures, algorithms and scripting for automation.', link: 'https://python.org', color: '#059669' },
-    { id: 3, name: 'Networking', category: 'Technology', notes: 'TCP/IP, DNS, HTTP protocols, firewalls and network security fundamentals.', link: 'https://www.cloudflare.com/learning/', color: '#dc2626' },
-    { id: 4, name: 'Database', category: 'Technology', notes: 'SQL, NoSQL, normalization, indexing, transactions and database design.', link: 'https://www.postgresql.org/docs/', color: '#d97706' },
+const quotes = [
+  "Success is the sum of small efforts repeated day in and day out.",
+  "Do something today that your future self will thank you for.",
+  "Focus on progress, not perfection.",
+  "Small steps every day lead to big results.",
+  "Discipline is choosing what you want most over what you want now."
 ];
 
-// Load subjects on page load
-async function loadSubjects() {
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('cards-grid').innerHTML = '';
-
-    try {
-        const res = await fetch(`${API}/subjects`);
-        if (!res.ok) throw new Error('Backend error');
-        allSubjects = await res.json();
-        document.getElementById('error-box').style.display = 'none';
-    } catch (err) {
-        // Use demo data if backend is offline
-        allSubjects = demoData;
-        document.getElementById('error-box').style.display = 'block';
-    }
-
-    document.getElementById('loading').style.display = 'none';
-    renderCards(allSubjects);
-    updateStats();
+function scrollToSection(sectionId) {
+  document.getElementById(sectionId).scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
-// Render cards
-function renderCards(subjects) {
-    const grid = document.getElementById('cards-grid');
-    grid.innerHTML = '';
+function addTask() {
+  const taskText = taskInput.value.trim();
 
-    if (subjects.length === 0) {
-        grid.innerHTML = `
-            <div class="empty">
-                <div class="empty-icon">📭</div>
-                <p>No subjects found. Add one!</p>
-            </div>`;
-        return;
-    }
+  if (taskText === "") {
+    alert("Please enter a task.");
+    return;
+  }
 
-    subjects.forEach((s, i) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.style.animationDelay = `${i * 0.08}s`;
-        card.innerHTML = `
-            <div class="card-top" style="background:${s.color || '#6c63ff'}"></div>
-            <div class="card-body">
-                <span class="card-badge">${s.category}</span>
-                <h3 class="card-title">${s.name}</h3>
-                <p class="card-notes">${s.notes || 'No notes added yet.'}</p>
-                <div class="card-footer">
-                    ${s.link ? `<a class="card-link" href="${s.link}" target="_blank">View Resource →</a>` : '<span></span>'}
-                    <button class="delete-btn" onclick="deleteSubject(${s.id})">Delete</button>
-                </div>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
+  const li = document.createElement("li");
+
+  const leftDiv = document.createElement("div");
+  leftDiv.className = "task-left";
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+
+  const span = document.createElement("span");
+  span.textContent = taskText;
+
+  checkbox.addEventListener("change", () => {
+    span.classList.toggle("completed");
+    updateTaskCounts();
+  });
+
+  leftDiv.appendChild(checkbox);
+  leftDiv.appendChild(span);
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.className = "delete-btn";
+  deleteBtn.onclick = () => {
+    li.remove();
+    updateTaskCounts();
+  };
+
+  li.appendChild(leftDiv);
+  li.appendChild(deleteBtn);
+  taskList.appendChild(li);
+
+  taskInput.value = "";
+  updateTaskCounts();
 }
 
-// Update stats
-function updateStats() {
-    document.getElementById('total-count').textContent = allSubjects.length;
-    const cats = new Set(allSubjects.map(s => s.category));
-    document.getElementById('category-count').textContent = cats.size;
+function updateTaskCounts() {
+  const tasks = taskList.querySelectorAll("li");
+  const checkedTasks = taskList.querySelectorAll('input[type="checkbox"]:checked');
+
+  completedCount.textContent = checkedTasks.length;
+  pendingCount.textContent = tasks.length - checkedTasks.length;
 }
 
-// Filter subjects
-function filterSubjects(category, btn) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+function updateTimerDisplay() {
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById("timer").textContent =
+    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
 
-    if (category === 'all') {
-        renderCards(allSubjects);
+function startTimer() {
+  if (isRunning) return;
+
+  isRunning = true;
+
+  timer = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerDisplay();
     } else {
-        renderCards(allSubjects.filter(s => s.category === category));
+      clearInterval(timer);
+      isRunning = false;
+      alert("Focus session completed!");
+      timeLeft = 25 * 60;
+      updateTimerDisplay();
     }
+  }, 1000);
 }
 
-// Add subject
-async function addSubject() {
-    const name = document.getElementById('input-name').value.trim();
-    const category = document.getElementById('input-category').value;
-    const notes = document.getElementById('input-notes').value.trim();
-    const link = document.getElementById('input-link').value.trim();
-
-    if (!name) { showToast('⚠️ Please enter a subject name'); return; }
-
-    const newSubject = { name, category, notes, link, color: selectedColor };
-
-    try {
-        const res = await fetch(`${API}/subjects`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newSubject)
-        });
-        if (!res.ok) throw new Error();
-        showToast('✅ Subject added!');
-    } catch {
-        // Add locally if backend offline
-        newSubject.id = Date.now();
-        allSubjects.push(newSubject);
-        showToast('✅ Subject added (demo mode)');
-    }
-
-    closeModal();
-    clearForm();
-    await loadSubjects();
+function resetTimer() {
+  clearInterval(timer);
+  isRunning = false;
+  timeLeft = 25 * 60;
+  updateTimerDisplay();
 }
 
-// Delete subject
-async function deleteSubject(id) {
-    try {
-        await fetch(`${API}/subjects/${id}`, { method: 'DELETE' });
-        showToast('🗑️ Subject deleted');
-    } catch {
-        allSubjects = allSubjects.filter(s => s.id !== id);
-        showToast('🗑️ Subject deleted (demo mode)');
-    }
-    await loadSubjects();
+function newQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  document.getElementById("quoteText").textContent = quotes[randomIndex];
 }
 
-// Modal
-function openModal() {
-    document.getElementById('modal').classList.add('open');
-    document.getElementById('modal-overlay').classList.add('open');
-}
-
-function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-    document.getElementById('modal-overlay').classList.remove('open');
-}
-
-function clearForm() {
-    document.getElementById('input-name').value = '';
-    document.getElementById('input-notes').value = '';
-    document.getElementById('input-link').value = '';
-}
-
-// Color picker
-function selectColor(el) {
-    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-    el.classList.add('active');
-    selectedColor = el.dataset.color;
-}
-
-// Toast
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// Init
-loadSubjects();
+updateTimerDisplay();
+updateTaskCounts();

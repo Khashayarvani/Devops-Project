@@ -3,13 +3,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cloud DevOps Frontend</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>StudyFlow</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to Our Project by Ishara and Kashayar</h1>
-    <p>It is running in Docker.</p>
+  <div class="background-shapes">
+    <span class="shape shape-1"></span>
+    <span class="shape shape-2"></span>
+    <span class="shape shape-3"></span>
   </div>
+
+  <header class="navbar">
+    <div class="logo">Study<span>Flow</span></div>
+    <nav>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#focus">Focus</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <p class="tag">Plan better. Study smarter.</p>
+      <h1>Your Personal Study Organizer</h1>
+      <p class="hero-description">
+        Organize your tasks, manage your study schedule, and stay focused with a modern and beautiful study dashboard.
+      </p>
+      <div class="hero-buttons">
+        <button class="primary-btn" onclick="scrollToSection('tasks')">Get Started</button>
+        <button class="secondary-btn" onclick="scrollToSection('focus')">Start Focus Mode</button>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <h3>Today’s Study Summary</h3>
+      <div class="summary-box">
+        <p><strong>Tasks Completed:</strong> <span id="completedCount">0</span></p>
+        <p><strong>Pending Tasks:</strong> <span id="pendingCount">0</span></p>
+        <p><strong>Focus Session:</strong> 25 Minutes</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="container" id="dashboard">
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h3>Subjects</h3>
+        <p>4 Active Courses</p>
+      </div>
+      <div class="stat-card">
+        <h3>Study Hours</h3>
+        <p>12 Hours This Week</p>
+      </div>
+      <div class="stat-card">
+        <h3>Progress</h3>
+        <p>78% Goal Reached</p>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel" id="tasks">
+        <h2>My Tasks</h2>
+        <div class="task-input-area">
+          <input type="text" id="taskInput" placeholder="Enter a study task..." />
+          <button onclick="addTask()">Add Task</button>
+        </div>
+        <ul id="taskList" class="task-list"></ul>
+      </div>
+
+      <div class="panel" id="schedule">
+        <h2>Study Schedule</h2>
+        <div class="schedule-list">
+          <div class="schedule-item">
+            <span class="time">8:00 AM</span>
+            <div>
+              <h4>Cloud DevOps Review</h4>
+              <p>Read course notes and project steps</p>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="time">11:00 AM</span>
+            <div>
+              <h4>Assignment Work</h4>
+              <p>Complete frontend and backend files</p>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <span class="time">3:00 PM</span>
+            <div>
+              <h4>Practice Session</h4>
+              <p>Test Docker and deployment steps</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="focus">
+        <h2>Focus Timer</h2>
+        <div class="timer-box">
+          <h1 id="timer">25:00</h1>
+          <div class="timer-buttons">
+            <button onclick="startTimer()">Start</button>
+            <button onclick="resetTimer()">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Motivation</h2>
+        <div class="quote-box">
+          <p id="quoteText">Success is the sum of small efforts repeated day in and day out.</p>
+          <button onclick="newQuote()">New Quote</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Designed for students who want to stay organized and productive.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
